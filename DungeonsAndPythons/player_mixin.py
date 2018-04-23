@@ -1,9 +1,9 @@
 class PlayerMixin:
     def __init__(self, *, health, mana):
-        self._max_health = self.health
-        self._max_mana = self.mana
         self._health = health
+        self._max_health = self._health
         self._mana = mana
+        self._max_mana = self._mana
         self._weapon = None
         self._spell = None
 
