@@ -14,11 +14,11 @@ class Spell:
         return self._damage
 
     @property
-    def get_mana_cost(self):
+    def mana_cost(self):
         return self._mana_cost
 
     @property
-    def get_cast_range(self):
+    def cast_range(self):
         return self._cast_range
 
     def __str__(self):
