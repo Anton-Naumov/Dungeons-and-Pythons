@@ -17,16 +17,20 @@ class PlayerMixin:
         return self._mana
 
     def can_cast(self):
-        return self._mana > self._spell.mana_cost()
+        raise Exception('Not implemented method \"can_cast\"!')
 
     def take_healing(self, healing_points):
-        self._health = max(self._health + healing_points, self._max_health)
+        if self.is_alive() is False:
+            return False
+
+        self._health = min(self._health + healing_points, self._max_health)
+        return True
 
     def take_mana(self, mana_points):
-        self._mana = max(self._mana + mana_points, self._max_mana)
+        self._mana = min(self._mana + mana_points, self._max_mana)
 
     def attack(self):
-        raise Exception('Not implemented!')
+        raise Exception('Not implemented mothod \"attack\"!')
 
-    def take_deamage(self, deamage):
+    def take_damage(self, deamage):
         self._health = max(self._health - deamage, 0)

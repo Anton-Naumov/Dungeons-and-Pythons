@@ -1,11 +1,11 @@
 import unittest
-from player_mixin.py import PlayerMixin
+from player_mixin import PlayerMixin
 
 
 class PlayerMixinTests(unittest.TestCase):
     def setUp(self):
-        self.player_with_no_mana = PlayerMixin(100, 0)
-        self.dead_player = PlayerMixin(0, 50)
+        self.player_with_no_mana = PlayerMixin(health=100, mana=0)
+        self.dead_player = PlayerMixin(health=0, mana=50)
 
     def test_is_alive_works(self):
         self.assertFalse(self.dead_player.is_alive())
@@ -25,15 +25,14 @@ class PlayerMixinTests(unittest.TestCase):
             self.assertFalse(self.player_with_no_mana.is_alive())
 
         with self.subTest('health_doesnt_become_negative'):
-            player = PlayerMixin(10, 0)
+            player = PlayerMixin(health=10, mana=0)
             player.take_damage(20)
             self.assertEqual(player.get_health(), 0)
 
         with self.subTest('ONE DAMAGE OFF OF LETHAL'):
-            print('BAHTI MANQKA SUM A')
             self.player_with_no_mana._health = 100
             self.player_with_no_mana.take_damage(99)
-            self.assertNotEqual(self.player_with_no_mana.get_health(), 1)
+            self.assertEqual(self.player_with_no_mana.get_health(), 1)
 
         with self.subTest('take floating point damage'):
             self.player_with_no_mana._health = 100
@@ -52,7 +51,7 @@ class PlayerMixinTests(unittest.TestCase):
         with self.subTest('heal a bit'):
             self.player_with_no_mana.take_damage(20)
             self.assertTrue(self.player_with_no_mana.take_healing(10))
-            self.assertEqual(self.player.get_health(), 90)
+            self.assertEqual(self.player_with_no_mana.get_health(), 90)
 
     def test_take_mana(self):
         self.dead_player._mana = 10
