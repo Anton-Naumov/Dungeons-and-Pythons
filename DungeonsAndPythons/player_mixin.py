@@ -32,5 +32,5 @@ class PlayerMixin:
     def attack(self):
         raise Exception('Not implemented mothod \"attack\"!')
 
-    def take_damage(self, deamage):
-        self._health = max(self._health - deamage, 0)
+    def take_damage(self, damage):
+        self._health = max(self._health - damage, 0)
