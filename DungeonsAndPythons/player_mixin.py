@@ -29,8 +29,14 @@ class PlayerMixin:
     def take_mana(self, mana_points):
         self._mana = min(self._mana + mana_points, self._max_mana)
 
-    def attack(self):
+    def attack(self, *, by):
         raise Exception('Not implemented mothod \"attack\"!')
 
-    def take_damage(self, deamage):
-        self._health = max(self._health - deamage, 0)
+    def take_damage(self, damage):
+        self._health = max(self._health - damage, 0)
+
+    def equip(self, weapon):
+        self._weapon = weapon
+
+    def learn(self, spell):
+        self._spell = spell

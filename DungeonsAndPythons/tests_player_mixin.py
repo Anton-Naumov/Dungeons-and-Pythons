@@ -66,7 +66,7 @@ class PlayerMixinTests(unittest.TestCase):
 
     def test_attack_is_called_without_being_overriden(self):
         with self.assertRaises(Exception):
-            self.dead_player.attack()
+            self.dead_player.attack(by='weapon')
 
 
 if __name__ == '__main__':
