@@ -1,5 +1,7 @@
 import unittest
 from hero import Hero
+from spell import Spell
+from weapon import Weapon
 
 
 class TestsHero(unittest.TestCase):
@@ -20,6 +22,9 @@ class TestsHero(unittest.TestCase):
                             mana=100,
                             mana_regeneration_rate=2
         )
+
+        self.spell = Spell(name="Fireball", damage=30, mana_cost=110, cast_range=2)
+        self.weapon = Weapon(name="The Axe of Destiny", damage=20)
 
     def test_init_working_correctly(self):
         with self.subTest('hero1'):
@@ -48,9 +53,15 @@ class TestsHero(unittest.TestCase):
         with self.subTest('spell is None'):
             self.assertFalse(self.hero1.can_cast())
 
-        # add test when mana is not enough
+        with self.subTest('when mana is not enough'):
+            self.hero2._spell = self.spell
 
-        # add test when can_cast is true
+            self.assertTrue(self.hero2.can_cast())
+
+        with self.subTest('when mana is not enough'):
+            self.hero1._spell = self.spell
+
+            self.assertTrue(self.hero1.can_cast())
 
     def test_attack_raises_exception(self):
         with self.subTest('when by == weapon and hero\'s weapon is None'):
@@ -74,7 +85,18 @@ class TestsHero(unittest.TestCase):
             ):
                 self.hero1.attack(by='foot')
 
-    # add more tests for attack
+    def test_attack_returns_correct_damage(self):
+        with self.subTest('\'by\' == \'spell\''):
+            self.hero2._spell = self.spell
+            damage = self.hero2.attack(by='spell')
+
+            self.assertEqual(damage, 30)
+
+        with self.subTest('\'by\' == \'weapon\''):
+            self.hero2._weapon = self.weapon
+            damage = self.hero2.attack(by='weapon')
+
+            self.assertEqual(damage, 20)
 
 
 if __name__ == '__main__':
