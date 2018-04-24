@@ -1,5 +1,7 @@
 import unittest
 from player_mixin import PlayerMixin
+from weapon import Weapon
+from spell import Spell
 
 
 class PlayerMixinTests(unittest.TestCase):
@@ -60,13 +62,42 @@ class PlayerMixinTests(unittest.TestCase):
         self.dead_player.take_mana(30)
         self.assertEqual(self.dead_player.get_mana(), 50)
 
-    def test_can_cast_is_called_without_being_overriden(self):
-        with self.assertRaises(Exception):
-            self.dead_player.can_cast()
+    def test_can_cast_works(self):
+        self.assertFalse(self.dead_player.can_cast())
+        s = Spell(name='Fireball', damage=10, mana_cost=40, cast_range=2)
+        self.dead_player.learn(s)
+        self.assertTrue(self.dead_player.can_cast())
+        s = Spell(name='Fireball', damage=10, mana_cost=60, cast_range=2)
+        self.dead_player.learn(s)
+        self.assertFalse(self.dead_player.can_cast())
 
     def test_attack_is_called_without_being_overriden(self):
         with self.assertRaises(Exception):
             self.dead_player.attack(by='weapon')
+
+    def test_pick_better_tool_to_fight(self):
+        with self.subTest('Nothing equiped'):
+            with self.assertRaises(Exception):
+                self.player_with_no_mana.pick_better_tool_to_fight()
+
+        with self.subTest('Equip a weapon'):
+            w = Weapon(name='The Axe of Destiny', damage=20)
+
+            self.player_with_no_mana.equip(w)
+            self.assertEqual(self.player_with_no_mana.pick_better_tool_to_fight(), 'weapon')
+
+        with self.subTest('Equip a spell'):
+            s = Spell(name='Fireball', damage=30, mana_cost=60, cast_range=2)
+            self.player_with_no_mana.learn(s)
+            self.assertEqual(self.player_with_no_mana.pick_better_tool_to_fight(), 'spell')
+
+            s = Spell(name='Wrath', damage=10, mana_cost=50, cast_range=1)
+            self.player_with_no_mana.learn(s)
+            self.assertEqual(self.player_with_no_mana.pick_better_tool_to_fight(), 'weapon')
+
+            w = None
+            self.player_with_no_mana.equip(w)
+            self.assertEqual(self.player_with_no_mana.pick_better_tool_to_fight(), 'spell')
 
 
 if __name__ == '__main__':

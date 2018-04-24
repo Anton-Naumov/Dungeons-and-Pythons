@@ -19,9 +19,6 @@ class Hero(PlayerMixin):
     def known_as(self):
         return f'{self._name} the {self._title}'
 
-    def can_cast(self):
-        return self._spell is not None and self._mana >= self._spell.mana_cost
-
     def attack(self, *, by):
         if by == 'weapon':
             if self._weapon is not None:
