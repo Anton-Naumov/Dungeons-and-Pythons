@@ -12,7 +12,6 @@ class TestsHero(unittest.TestCase):
                             health=250,
                             mana=1000,
                             mana_regeneration_rate=25,
-                            pos=(1, 1)
         )
 
         self.hero2 = Hero(
@@ -35,12 +34,8 @@ class TestsHero(unittest.TestCase):
             self.assertEqual(self.hero1._mana, 1000)
             self.assertEqual(self.hero1._max_mana, 1000)
             self.assertEqual(self.hero1._mana_regeneration_rate, 25)
-            self.assertEqual(self.hero1._pos, (1, 1))
             self.assertEqual(self.hero1._weapon, None)
             self.assertEqual(self.hero1._spell, None)
-
-        with self.subTest('hero2 (no pos given in the constructor)'):
-            self.assertEqual(self.hero2._pos, (0, 0))
 
     def test_known_as(self):
         with self.subTest('hero1'):

@@ -8,11 +8,9 @@ class Enemy(PlayerMixin):
             health,
             mana,
             damage,
-            pos=(0, 0)
     ):
         super().__init__(health=health, mana=mana)
         self.__damage = damage
-        self.__pos = pos
 
     def can_cast(self):
         return self._spell is not None and self._mana >= self._spell.mana_cost
