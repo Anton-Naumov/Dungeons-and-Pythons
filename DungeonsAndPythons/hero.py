@@ -23,18 +23,11 @@ class Hero(PlayerMixin):
         return self._spell is not None and self._mana >= self._spell.mana_cost
 
     def attack(self, *, by):
-        if by == 'weapon':
-            if self._weapon is not None:
-                return self._weapon.get_damage
-            else:
-                raise Exception('The hero must have a weapon to attack with it!')
+        if by == 'weapon' and self._weapon is not None:
+            return self._weapon.get_damage
 
-        if by == 'spell':
-            if self._spell is not None and self.can_cast():
+        if by == 'spell' and self._spell is not None and self.can_cast():
                 self._mana -= self._spell.mana_cost
                 return self._spell.get_damage
-            else:
-                raise Exception('The hero hasn\'t learned a spell yet or doesn\''
-                                'have enough mana!')
 
-        raise Exception(f'Invalid argument \'by={by}\'')
+        return 0

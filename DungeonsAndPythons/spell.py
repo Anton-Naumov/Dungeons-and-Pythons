@@ -33,3 +33,20 @@ class Spell:
                self._damage == other._damage and\
                self._mana_cost == other._mana_cost and\
                self._cast_range == other._cast_range
+
+    def to_json(self):
+        return {
+            'name': self._name,
+            'damage': self._damage,
+            'mana_cost': self._mana_cost,
+            'cast_range': self._cast_range
+        }
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(
+            name=json_dict['name'],
+            damage=json_dict['damage'],
+            mana_cost=json_dict['mana_const'],
+            cast_range=json_dict['cast_range']
+        )
