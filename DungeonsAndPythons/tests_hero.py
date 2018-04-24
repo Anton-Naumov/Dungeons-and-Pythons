@@ -7,19 +7,19 @@ from weapon import Weapon
 class TestsHero(unittest.TestCase):
     def setUp(self):
         self.hero1 = Hero(
-                            name='Toni',
-                            title='Pythonslayer',
-                            health=250,
-                            mana=1000,
-                            mana_regeneration_rate=25,
+            name='Toni',
+            title='Pythonslayer',
+            health=250,
+            mana=1000,
+            mana_regeneration_rate=25,
         )
 
         self.hero2 = Hero(
-                            name="Bron",
-                            title="Dragonslayer",
-                            health=100,
-                            mana=100,
-                            mana_regeneration_rate=2
+            name="Bron",
+            title="Dragonslayer",
+            health=100,
+            mana=100,
+            mana_regeneration_rate=2
         )
 
         self.spell = Spell(name="Fireball", damage=30, mana_cost=110, cast_range=2)
@@ -81,6 +81,77 @@ class TestsHero(unittest.TestCase):
             damage = self.hero2.attack(by='weapon')
 
             self.assertEqual(damage, 20)
+
+    def test_eq_returns_false_when_hero1_super_different_than_hero2_super(self):
+        hero3 = Hero(
+            name="Bron",
+            title="Dragonslayer",
+            health=100,
+            mana=100,
+            mana_regeneration_rate=2
+        )
+
+        hero3.learn(self.spell)
+
+        self.assertNotEqual(self.hero2, hero3)
+
+    def test_eq_returns_false_when_hero1_has_different_attr_than_hero2_super(self):
+        hero3 = Hero(
+            name="Toni",
+            title="Dragonslayer",
+            health=100,
+            mana=100,
+            mana_regeneration_rate=2
+        )
+
+        self.assertNotEqual(self.hero2, hero3)
+
+    def test_eq_returns_true_when_super_and_all_attrs_are_the_same(self):
+        hero3 = Hero(
+            name="Bron",
+            title="Dragonslayer",
+            health=100,
+            mana=100,
+            mana_regeneration_rate=2
+        )
+
+        self.assertEqual(self.hero2, hero3)
+
+    def test_to_json(self):
+        self.hero1.learn(self.spell)
+        expected = {
+            'name': 'Toni',
+            'title': 'Pythonslayer',
+            'mana_regeneration_rate': 25,
+            'health': 250,
+            'mana': 1000,
+            'weapon': None,
+            'spell': {
+                'name': 'Fireball',
+                'damage': 30,
+                'mana_cost': 110,
+                'cast_range': 2
+            }
+        }
+
+        self.assertDictEqual(self.hero1.to_json(), expected)
+
+    def test_from_json(self):
+        self.hero1.equip(self.weapon)
+        json_dict = {
+            'name': 'Toni',
+            'title': 'Pythonslayer',
+            'mana_regeneration_rate': 25,
+            'health': 250,
+            'mana': 1000,
+            'weapon': {
+                'name': 'The Axe of Destiny',
+                'damage': 20
+            },
+            'spell': None
+        }
+
+        self.assertEqual(self.hero1, Hero.from_json(json_dict))
 
 
 if __name__ == '__main__':

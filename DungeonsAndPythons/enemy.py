@@ -3,11 +3,11 @@ from player_mixin import PlayerMixin
 
 class Enemy(PlayerMixin):
     def __init__(
-            self,
-            *,
-            health,
-            mana,
-            damage,
+        self,
+        *,
+        health,
+        mana,
+        damage,
     ):
         super().__init__(health=health, mana=mana)
         self.__damage = damage
