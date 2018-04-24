@@ -47,6 +47,6 @@ class Spell:
         return cls(
             name=json_dict['name'],
             damage=json_dict['damage'],
-            mana_cost=json_dict['mana_const'],
+            mana_cost=json_dict['mana_cost'],
             cast_range=json_dict['cast_range']
         )
