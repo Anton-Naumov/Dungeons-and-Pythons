@@ -15,7 +15,7 @@ class Enemy(PlayerMixin):
         self.__pos = pos
 
     def can_cast(self):
-        return self._spell is not None and self._mana >= self._spell.get_mana_cost
+        return self._spell is not None and self._mana >= self._spell.mana_cost
 
     def attack(self, *, by=None):
         if by == 'weapon' and self._weapon is not None:
