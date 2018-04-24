@@ -1,11 +1,18 @@
 import unittest
 from player_mixin import PlayerMixin
+from spell import Spell
+from weapon import Weapon
 
 
 class PlayerMixinTests(unittest.TestCase):
     def setUp(self):
         self.player_with_no_mana = PlayerMixin(health=100, mana=0)
         self.dead_player = PlayerMixin(health=0, mana=50)
+
+        self.player = PlayerMixin(health=100, mana=100)
+        self.player2 = PlayerMixin(health=100, mana=100)
+        self.w = Weapon(name="Axe", damage=20)
+        self.s = Spell(name="Fireball", damage=30, mana_cost=50, cast_range=2)
 
     def test_is_alive_works(self):
         self.assertFalse(self.dead_player.is_alive())
@@ -67,6 +74,79 @@ class PlayerMixinTests(unittest.TestCase):
     def test_attack_is_called_without_being_overriden(self):
         with self.assertRaises(Exception):
             self.dead_player.attack(by='weapon')
+
+    def test_eq_returns_false_when_player1_has_weapon_and_player2_doesnt_have(self):
+        self.player.equip(self.w)
+
+        self.assertNotEqual(self.player, self.player2)
+
+    def test_eq_returns_false_when_player1_has_spell_and_player2_doesnt_have(self):
+        self.player.learn(self.s)
+
+        self.assertNotEqual(self.player, self.player2)
+
+    def test_eq_returns_false_when_weapons_are_not_the_same(self):
+        self.player2.equip(Weapon(name="Knife", damage=20))
+        self.player.equip(self.w)
+
+        self.assertNotEqual(self.player, self.player2)
+
+    def test_eq_returns_false_when_spells_are_not_the_same(self):
+        self.player2.learn(Spell(name="FrostBall", damage=30, mana_cost=50, cast_range=2))
+        self.player.learn(self.s)
+
+        self.assertNotEqual(self.player, self.player2)
+
+    def test_eq_returns_false_when_any_other_attrs_are_not_the_same(self):
+        with self.subTest('when health is not the same'):
+            player3 = PlayerMixin(health=50, mana=100)
+
+            self.assertNotEqual(self.player, player3)
+
+        with self.subTest('when max_health is not the same'):
+            player3 = PlayerMixin(health=150, mana=100)
+            player3._health = 100
+
+            self.assertNotEqual(self.player, player3)
+
+    def test_eq_returns_true(self):
+        self.player.equip(self.w)
+        self.player.learn(self.s)
+        self.player2.equip(self.w)
+        self.player2.learn(self.s)
+
+        self.assertEqual(self.player, self.player2)
+
+    def test_to_json(self):
+        self.player.equip(self.w)
+
+        expected = {
+            'health': 100,
+            'mana': 100,
+            'weapon': {
+                'name': 'Axe',
+                'damage': 20
+            },
+            'spell': None
+        }
+
+        self.assertDictEqual(self.player.to_json(), expected)
+
+    def test_from_json(self):
+        json_dict = {
+            'health': 100,
+            'mana': 100,
+            'weapon': None,
+            'spell': {
+                'name': 'Fireball',
+                'damage': 30,
+                'mana_cost': 50,
+                'cast_range': 2
+            }
+        }
+        self.player.learn(self.s)
+
+        self.assertEqual(PlayerMixin.from_json(json_dict), self.player)
 
 
 if __name__ == '__main__':

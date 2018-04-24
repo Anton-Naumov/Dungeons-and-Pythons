@@ -1,3 +1,7 @@
+from weapon import Weapon
+from spell import Spell
+
+
 class PlayerMixin:
     def __init__(self, *, health, mana):
         self._health = health
@@ -40,3 +44,36 @@ class PlayerMixin:
 
     def learn(self, spell):
         self._spell = spell
+
+    def __eq__(self, other):
+        if sum([obj._weapon is None for obj in [self, other]]) == 1 or\
+           sum([obj._spell is None for obj in [self, other]]) == 1:
+            return False
+
+        return self._health == other._health and\
+            self._max_health == other._max_health and\
+            self._mana == other._mana and\
+            self._max_mana == other._max_mana and\
+            self._weapon == other._weapon and\
+            self._spell == other._spell
+
+    def to_json(self):
+        return {
+            'health': self._health,
+            'mana': self._mana,
+            'weapon': self._weapon.to_json() if self._weapon is not None else None,
+            'spell': self._spell.to_json() if self._spell is not None else None
+        }
+
+    @classmethod
+    def from_json(cls, json_dict):
+        player = PlayerMixin(health=json_dict['health'], mana=json_dict['mana'])
+
+        weapon = Weapon.from_json(json_dict['weapon']) if json_dict['weapon'] is not None\
+            else None
+        spell = Spell.from_json(json_dict['spell']) if json_dict['spell'] is not None\
+            else None
+        player.equip(weapon)
+        player.learn(spell)
+
+        return player
