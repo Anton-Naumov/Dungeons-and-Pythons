@@ -30,3 +30,31 @@ class Enemy(PlayerMixin):
     def take_mana(self):
         # print('You cannot regenerate mana!')
         return False
+
+    def __eq__(self, other):
+        return super(Enemy, other).__eq__(self) and\
+            self.__damage == other.__damage
+
+    def to_json(self):
+        json_dict = {
+            'damage': self.__damage
+        }
+
+        json_dict.update(super().to_json())
+
+        return json_dict
+
+    @classmethod
+    def from_json(cls, json_dict):
+        enemy = cls(
+            health=json_dict['health'],
+            mana=json_dict['mana'],
+            damage=json_dict['damage']
+        )
+
+        base_class_hero = PlayerMixin.from_json(json_dict)
+
+        enemy.equip(base_class_hero._weapon)
+        enemy.learn(base_class_hero._spell)
+
+        return enemy
