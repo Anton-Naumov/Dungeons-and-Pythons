@@ -11,19 +11,18 @@ class EnemyTests(unittest.TestCase):
         s = Spell(name='Fireball', damage=30, mana_cost=60, cast_range=2)
 
         self.e.equip(w)
-        self.e.equip(s)
+        self.e.learn(s)
 
     def test_can_cast(self):
         self.assertTrue(self.e.can_cast())
-        self.e.__mana = 30
+        self.e._mana = 29
         self.assertFalse(self.e.can_cast())
 
     def test_attack(self):
-        self.assertEquals(self.e.attack(), 50)
-        self.assertEquals(self.e.attack(by='weapon'), 70)
-        self.assertEquals(self.e.attack(by='spell'), 80)
+        self.assertEqual(self.e.attack(by='weapon'), 70)
+        self.assertEqual(self.e.attack(by='spell'), 80)
         with self.assertRaises(Exception):
-        	self.e.attack(by='spell')
+            self.e.attack(by='spell')
 
     def test_take_mana(self):
         self.assertFalse(self.e.take_mana())
