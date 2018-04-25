@@ -58,28 +58,15 @@ class TestsHero(unittest.TestCase):
 
             self.assertTrue(self.hero1.can_cast())
 
-    def test_attack_raises_exception(self):
+    def test_attack_returns_0(self):
         with self.subTest('when by == weapon and hero\'s weapon is None'):
-            with self.assertRaises(
-                                      Exception,
-                                      msg='The hero must have a weapon to attack with it!'
-            ):
-                self.hero1.attack(by='weapon')
+            self.assertEqual(self.hero1.attack(by='weapon'), 0)
 
         with self.subTest('when by == spell and hero\'s spell is None'):
-            with self.assertRaises(
-                                      Exception,
-                                      msg='The hero hasn\'t learned a spell yet or doesn\''
-                                          'have enough mana!'
-            ):
-                self.hero1.attack(by='spell')
+            self.assertEqual(self.hero1.attack(by='spell'), 0)
 
         with self.subTest('when by is not \'weapon\' or \'spell\''):
-            with self.assertRaises(
-                                      Exception,
-                                      msg='Invalid argument \'by=foot\''
-            ):
-                self.hero1.attack(by='foot')
+            self.assertEqual(self.hero1.attack(by='foot'), 0)
 
     def test_attack_returns_correct_damage(self):
         with self.subTest('\'by\' == \'spell\''):
