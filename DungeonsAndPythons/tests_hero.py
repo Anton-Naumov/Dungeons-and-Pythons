@@ -126,12 +126,7 @@ class TestsHero(unittest.TestCase):
             'health': 250,
             'mana': 1000,
             'weapon': None,
-            'spell': {
-                'name': 'Fireball',
-                'damage': 30,
-                'mana_cost': 110,
-                'cast_range': 2
-            }
+            'spell': self.spell.to_json()
         }
 
         self.assertDictEqual(self.hero1.to_json(), expected)
@@ -144,10 +139,7 @@ class TestsHero(unittest.TestCase):
             'mana_regeneration_rate': 25,
             'health': 250,
             'mana': 1000,
-            'weapon': {
-                'name': 'The Axe of Destiny',
-                'damage': 20
-            },
+            'weapon': self.weapon.to_json(),
             'spell': None
         }
 

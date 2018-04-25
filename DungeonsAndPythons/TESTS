@@ -1,0 +1,6 @@
+test_files=`ls|find tests*.py`
+files_variables=""
+for x in `echo $test_files`
+    do
+        python3.6 $x
+    done

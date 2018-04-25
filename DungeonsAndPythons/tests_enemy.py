@@ -7,11 +7,11 @@ from spell import Spell
 class EnemyTests(unittest.TestCase):
     def setUp(self):
         self.e = Enemy(health=100, mana=100, damage=50)
-        w = Weapon(name='The Axe of Destiny', damage=20)
-        s = Spell(name='Fireball', damage=30, mana_cost=60, cast_range=2)
+        self.w = Weapon(name='The Axe of Destiny', damage=20)
+        self.s = Spell(name='Fireball', damage=30, mana_cost=60, cast_range=2)
 
-        self.e.equip(w)
-        self.e.learn(s)
+        self.e.equip(self.w)
+        self.e.learn(self.s)
 
     def test_can_cast(self):
         self.assertTrue(self.e.can_cast())
@@ -50,16 +50,8 @@ class EnemyTests(unittest.TestCase):
             'damage': 50,
             'health': 100,
             'mana': 100,
-            'weapon': {
-                'name': 'The Axe of Destiny',
-                'damage': 20
-            },
-            'spell': {
-                'name': 'Fireball',
-                'damage': 30,
-                'mana_cost': 60,
-                'cast_range': 2
-            }
+            'weapon': self.w.to_json(),
+            'spell': self.s.to_json()
         }
 
         self.assertDictEqual(self.e.to_json(), expected)
@@ -69,16 +61,8 @@ class EnemyTests(unittest.TestCase):
             'damage': 50,
             'health': 100,
             'mana': 100,
-            'weapon': {
-                'name': 'The Axe of Destiny',
-                'damage': 20
-            },
-            'spell': {
-                'name': 'Fireball',
-                'damage': 30,
-                'mana_cost': 60,
-                'cast_range': 2
-            }
+            'weapon': self.w.to_json(),
+            'spell': self.s.to_json()
         }
 
         self.assertEqual(self.e, Enemy.from_json(json_dict))
