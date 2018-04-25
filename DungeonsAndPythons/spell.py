@@ -30,9 +30,9 @@ class Spell:
 
     def __eq__(self, other):
         return self._name == other._name and\
-               self._damage == other._damage and\
-               self._mana_cost == other._mana_cost and\
-               self._cast_range == other._cast_range
+           self._damage == other._damage and\
+           self._mana_cost == other._mana_cost and\
+           self._cast_range == other._cast_range
 
     def to_json(self):
         return {

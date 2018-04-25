@@ -21,7 +21,7 @@ class PlayerMixin:
         return self._mana
 
     def can_cast(self):
-        raise Exception('Not implemented method \"can_cast\"!')
+        return self._spell is not None and self._mana >= self._spell.mana_cost
 
     def take_healing(self, healing_points):
         if self.is_alive() is False:
@@ -45,6 +45,7 @@ class PlayerMixin:
     def learn(self, spell):
         self._spell = spell
 
+<<<<<<< HEAD
     def __eq__(self, other):
         if sum([obj._weapon is None for obj in [self, other]]) == 1 or\
            sum([obj._spell is None for obj in [self, other]]) == 1:
@@ -77,3 +78,25 @@ class PlayerMixin:
         player.learn(spell)
 
         return player
+=======
+    @property
+    def weapon(self):
+        return self._weapon
+
+    @property
+    def spell(self):
+        return self._spell
+
+    # TODO: write test
+    def pick_better_tool_to_fight(self):
+        if self._spell is None and self._weapon is None:
+            raise Exception('You havent equiped anything!')
+        elif self._spell is None and self._weapon is not None:
+            return 'weapon'
+        elif self._spell is not None and self._weapon is None:
+            return 'spell'
+        elif self._spell.get_damage >= self._weapon.get_damage:
+            return 'spell'
+        else:
+            return 'weapon'
+>>>>>>> 55d292b64ebd1b10eee2da407ff453e57e8b433c
