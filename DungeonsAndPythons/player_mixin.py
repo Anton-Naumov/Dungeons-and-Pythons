@@ -45,7 +45,6 @@ class PlayerMixin:
     def learn(self, spell):
         self._spell = spell
 
-<<<<<<< HEAD
     def __eq__(self, other):
         if sum([obj._weapon is None for obj in [self, other]]) == 1 or\
            sum([obj._spell is None for obj in [self, other]]) == 1:
@@ -78,7 +77,7 @@ class PlayerMixin:
         player.learn(spell)
 
         return player
-=======
+
     @property
     def weapon(self):
         return self._weapon
@@ -99,4 +98,3 @@ class PlayerMixin:
             return 'spell'
         else:
             return 'weapon'
->>>>>>> 55d292b64ebd1b10eee2da407ff453e57e8b433c
