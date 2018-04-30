@@ -23,6 +23,53 @@ class Dungeon:
     def print_map(self):
         print(self.get_map())
 
+    def spawn(self, hero):
+        for row in range(len(self._map)):
+            for col in range(len(self._map[row])):
+                if str(self._map[row][col]) == 'S':
+                    self._map[row][col] = hero
+                    self._hero = hero
+                    self._hero_pos = (row, col)
+                    return True
+        return False
+
+    directions = {
+        'left': (0, -1),
+        'right': (0, 1),
+        'down': (1, 0),
+        'up': (-1, 0)
+    }
+
+    def move_hero(self, direction):
+        new_pos_x = self._hero_pos[0] + self.directions[direction][0]
+        new_pos_y = self._hero_pos[1] + self.directions[direction][1]
+
+        if self._map[new_pos_x][new_pos_y] == '#' or new_pos_x < 0 or new_pos_y < 0 or\
+           new_pos_x >= len(self._map) or new_pos_y >= len(self._map[0]):
+            return False
+        elif self._map[new_pos_x][new_pos_y] == '.':
+            self._map[self._hero_pos[0]][self._hero_pos[1]] = '.'
+            self._hero_pos = new_pos_x, new_pos_y
+        elif self._map[new_pos_x][new_pos_y] == 'E':
+            pass
+        else:  # treasure
+            self.hero_open_treasure((new_pos_x, new_pos_y))
+        return True
+
+    def hero_open_treasure(self, pos_of_treasure):
+        treasure = self._map[pos_of_treasure[0]][pos_of_treasure[1]]
+        if type(treasure) is dict:
+            if treasure['type'] == 'health':
+                self._hero.take_healing(treasure['amount'])
+            elif treasure['type'] == 'mana':
+                self._hero.take_mana(treasure['amount'])
+        elif type(treasure) is Weapon:
+            self._hero.equip(treasure)
+        elif type(treasure) is Spell:
+            self._hero.learn(treasure)
+        else:
+            raise Exception('No treasure on that pos!')
+
     def add_enemies(self, enemies):
         for pos_str, enemy_dict in enemies.items():
             pos = self.extract_pos(pos_str)
