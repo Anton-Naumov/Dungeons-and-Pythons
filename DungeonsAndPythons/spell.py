@@ -36,6 +36,7 @@ class Spell:
 
     def to_json(self):
         return {
+            'class': 'Spell',
             'name': self._name,
             'damage': self._damage,
             'mana_cost': self._mana_cost,

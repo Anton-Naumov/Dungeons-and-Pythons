@@ -26,6 +26,7 @@ class Weapon:
 
     def to_json(self):
         return {
+            'class': 'Weapon',
             'name': self._name,
             'damage': self._damage
         }
