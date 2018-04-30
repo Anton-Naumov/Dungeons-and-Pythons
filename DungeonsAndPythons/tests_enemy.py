@@ -2,6 +2,7 @@ import unittest
 from enemy import Enemy
 from weapon import Weapon
 from spell import Spell
+from exceptions import NotEnoughManaError, NotEquippedError
 
 
 class EnemyTests(unittest.TestCase):
@@ -21,7 +22,7 @@ class EnemyTests(unittest.TestCase):
     def test_attack(self):
         self.assertEqual(self.e.attack(by='weapon'), 70)
         self.assertEqual(self.e.attack(by='spell'), 80)
-        with self.assertRaises(Exception):
+        with self.assertRaises(NotEnoughManaError):
             self.e.attack(by='spell')
 
     def test_take_mana(self):

@@ -1,4 +1,5 @@
 from player_mixin import PlayerMixin
+from exceptions import NotEnoughManaError, NotEquippedError
 
 
 class Enemy(PlayerMixin):
@@ -13,14 +14,8 @@ class Enemy(PlayerMixin):
         self.__damage = damage
 
     def attack(self, *, by=None):
-        if by == 'weapon' and self._weapon is not None:
-            return self.__damage + self._weapon.get_damage
-        elif by == 'spell' and self._spell is not None:
-            if self.can_cast():
-                self._mana -= self._spell._mana_cost
-                return self.__damage + self._spell.get_damage
-            else:
-                raise Exception("You dont have enough mana to cast this spell!")
+        if by is not None:
+            return super(Enemy, self).attack(by) + self.__damage
         else:
             return self.__damage
 
@@ -31,6 +26,12 @@ class Enemy(PlayerMixin):
     def __eq__(self, other):
         return super(Enemy, other).__eq__(self) and\
             self.__damage == other.__damage
+
+    def __str__(self):
+        return f'Enemy({PlayerMixin.__str__(self)}, damage={self.__damage})'
+
+    def __repr__(self):
+        return str(self)
 
     def to_json(self):
         json_dict = {

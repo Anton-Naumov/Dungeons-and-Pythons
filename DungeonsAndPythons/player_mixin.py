@@ -1,6 +1,6 @@
 from weapon import Weapon
 from spell import Spell
-
+from exceptions import NotEnoughManaError, NotEquippedError
 
 class PlayerMixin:
     def __init__(self, *, health, mana):
@@ -33,9 +33,6 @@ class PlayerMixin:
     def take_mana(self, mana_points):
         self._mana = min(self._mana + mana_points, self._max_mana)
 
-    def attack(self, *, by):
-        raise Exception('Not implemented mothod \"attack\"!')
-
     def take_damage(self, damage):
         self._health = max(self._health - damage, 0)
 
@@ -56,6 +53,12 @@ class PlayerMixin:
             self._max_mana == other._max_mana and\
             self._weapon == other._weapon and\
             self._spell == other._spell
+
+    def __str__(self):
+        return f'health={self._health},mana={self._mana}'
+
+    def __repr__(self):
+        return str(self)
 
     def to_json(self):
         return {
@@ -88,13 +91,35 @@ class PlayerMixin:
 
     # TODO: write test
     def pick_better_tool_to_fight(self):
-        if self._spell is None and self._weapon is None:
-            raise Exception('You havent equiped anything!')
-        elif self._spell is None and self._weapon is not None:
+        if not self.can_cast() and self.weapon is None:
+            raise NotEquippedError('Hero cant attack!')
+        elif self.can_cast() and self.weapon is not None:
+            if self.spell.get_damage >= self.weapon.get_damage:
+                return 'spell'
+            else:
+                return 'weapon'
+        elif self.weapon is not None:
             return 'weapon'
-        elif self._spell is not None and self._weapon is None:
-            return 'spell'
-        elif self._spell.get_damage >= self._weapon.get_damage:
-            return 'spell'
         else:
-            return 'weapon'
+            return 'spell'
+
+    def attack(self, by=None):
+        if by == 'weapon':
+            if self._weapon is not None:
+                return self._weapon.get_damage
+            else:
+                raise NotEquippedError("You havent equipped a weapon")
+
+        if by == 'spell':
+            if self._spell is None:
+                raise NotEquippedError("You havent learned a spell")
+            elif self.can_cast():
+                self._mana -= self._spell.mana_cost
+                return self._spell.get_damage
+            else:
+                raise NotEnoughManaError("You dont have enough mana")
+
+        if by is not None:
+            raise TypeError("Wrong 'by' type")
+
+        return 0

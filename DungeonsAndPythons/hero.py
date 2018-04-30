@@ -1,4 +1,5 @@
 from player_mixin import PlayerMixin
+from exceptions import NotEnoughManaError, NotEquippedError
 
 
 class Hero(PlayerMixin):
@@ -20,14 +21,16 @@ class Hero(PlayerMixin):
         return f'{self._name} the {self._title}'
 
     def attack(self, *, by):
-        if by == 'weapon' and self._weapon is not None:
-            return self._weapon.get_damage
+        if by is not None:
+            return super(Hero, self).attack(by)
+        else:
+            raise NotEquippedError("You havent equipped anything")
 
-        if by == 'spell' and self._spell is not None and self.can_cast():
-                self._mana -= self._spell.mana_cost
-                return self._spell.get_damage
+    def __str__(self):
+        return f'{self.known_as()}, {PlayerMixin.__str__(self)}'
 
-        return 0
+    def __repr__(self):
+        return str(self)
 
     def __eq__(self, other):
         return super(Hero, other).__eq__(self) and\

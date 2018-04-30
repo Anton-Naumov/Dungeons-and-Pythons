@@ -2,6 +2,7 @@ import unittest
 from player_mixin import PlayerMixin
 from weapon import Weapon
 from spell import Spell
+from exceptions import NotEquippedError, NotEnoughManaError
 
 
 class PlayerMixinTests(unittest.TestCase):
@@ -147,27 +148,36 @@ class PlayerMixinTests(unittest.TestCase):
 
     def test_pick_better_tool_to_fight(self):
         with self.subTest('Nothing equiped'):
-            with self.assertRaises(Exception):
+            with self.assertRaises(NotEquippedError):
                 self.player_with_no_mana.pick_better_tool_to_fight()
 
         with self.subTest('Equip a weapon'):
-            w = Weapon(name='The Axe of Destiny', damage=20)
-
-            self.player_with_no_mana.equip(w)
+            self.player_with_no_mana.equip(self.w)
             self.assertEqual(self.player_with_no_mana.pick_better_tool_to_fight(), 'weapon')
 
-        with self.subTest('Equip a spell'):
-            s = Spell(name='Fireball', damage=30, mana_cost=60, cast_range=2)
-            self.player_with_no_mana.learn(s)
+        with self.subTest('Have a weapon and spell with more damage but not enough mana for spell'):
+                self.player_with_no_mana.learn(self.s)
+                self.assertEqual(self.player_with_no_mana.pick_better_tool_to_fight(), 'weapon')
+
+        with self.subTest('Have enough mana and spell with more damage'):
+            self.player_with_no_mana._mana = 100
             self.assertEqual(self.player_with_no_mana.pick_better_tool_to_fight(), 'spell')
 
-            s = Spell(name='Wrath', damage=10, mana_cost=50, cast_range=1)
+        with self.subTest('Have spell but with less damage than weapon'):
+            s = Spell(name='Arcane Blast', damage=10, mana_cost=10, cast_range=1)
             self.player_with_no_mana.learn(s)
             self.assertEqual(self.player_with_no_mana.pick_better_tool_to_fight(), 'weapon')
 
+        with self.subTest('Have spell and no weapon'):
+            #have learnt s from previous subtest
             w = None
             self.player_with_no_mana.equip(w)
             self.assertEqual(self.player_with_no_mana.pick_better_tool_to_fight(), 'spell')
+
+        with self.subTest('Have spell and no weapon but doesnt have mana'):
+            self.player_with_no_mana._mana = 0
+            with self.assertRaises(NotEquippedError):
+                self.player_with_no_mana.pick_better_tool_to_fight()
 
 
 if __name__ == '__main__':

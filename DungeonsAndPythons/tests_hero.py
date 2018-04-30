@@ -2,6 +2,7 @@ import unittest
 from hero import Hero
 from spell import Spell
 from weapon import Weapon
+from exceptions import NotEquippedError, NotEnoughManaError
 
 
 class TestsHero(unittest.TestCase):
@@ -58,15 +59,24 @@ class TestsHero(unittest.TestCase):
 
             self.assertTrue(self.hero1.can_cast())
 
-    def test_attack_returns_0(self):
+    def test_attack_raises_exceptions_correctly(self):
         with self.subTest('when by == weapon and hero\'s weapon is None'):
-            self.assertEqual(self.hero1.attack(by='weapon'), 0)
+            with self.assertRaises(NotEquippedError):
+                self.hero1.attack(by='weapon')
 
         with self.subTest('when by == spell and hero\'s spell is None'):
-            self.assertEqual(self.hero1.attack(by='spell'), 0)
+            with self.assertRaises(NotEquippedError):
+                self.hero1.attack(by='spell')
 
         with self.subTest('when by is not \'weapon\' or \'spell\''):
-            self.assertEqual(self.hero1.attack(by='foot'), 0)
+            with self.assertRaises(TypeError):
+                self.hero1.attack(by='foot')
+
+        with self.subTest('when spell costs more then current mana'):
+            with self.assertRaises(NotEnoughManaError):
+                self.hero1.learn(self.spell)
+                for x in range(0, 20):
+                    self.hero1.attack(by='spell')
 
     def test_attack_returns_correct_damage(self):
         with self.subTest('\'by\' == \'spell\''):
