@@ -16,18 +16,25 @@ class Fight:
 
     def fight(self):
         while(self._hero.is_alive() and self._enemy.is_alive()):
-            attack_type = self.hero_choose_better_attack()
-            if attack_type is None:
-                print('Hero hasnt equiped anything!')
+            if(self._hero.is_alive()):
+                self.hero_attacks()
             else:
-                pass
+                print("You are dead!Game over.")
+            if(self._enemy.is_alive()):
+                self.enemy_attacks()
+            else:
+                print("Enemy is dead!")
 
     def hero_choose_better_attack(self):
         try:
             return self._hero.pick_better_tool_to_fight()
-        except Exception as exc:
-            print(exc)
+        except Exception:
             return None
 
     def hero_attacks(self):
-        pass
+        attack_tool = self.hero_choose_better_attack()
+        if attack_tool is None:
+            return self._hero.attack()
+        elif attack_tool == 'spell':
+            return self._hero.attack(by='spell')
+        return self._hero.attack(by='weapon')
