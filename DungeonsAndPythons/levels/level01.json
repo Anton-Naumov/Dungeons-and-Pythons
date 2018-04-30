@@ -1,0 +1,54 @@
+{
+  "map": [
+    "S.##.....T",
+    "#T##..###.",
+    "#.###E###E",
+    "#.E...###.",
+    "###T#####G"
+  ],
+  "enemies": {
+    "2,5": {
+      "damage": 10,
+      "health": 40,
+      "mana": 20,
+      "weapon": null,
+      "spell": {
+        "class": "Spell",
+        "name": "Fireball",
+        "damage": 5,
+        "mana_cost": 20,
+        "cast_range": 1
+      }
+    },
+    "2,9": {
+      "damage": 10,
+      "health": 40,
+      "mana": 20,
+      "weapon": {
+        "class": "Weapon",
+        "name": "The Axe of Destiny",
+        "damage": 10
+      },
+      "spell": null
+    },
+    "3,2": {
+      "damage": 10,
+      "health": 40,
+      "mana": 20,
+      "weapon": null,
+      "spell": null
+    }
+  },
+  "treasures": {
+    "1,1": {
+      "class": "Potion",
+      "type": "health",
+      "amount": 50
+    },
+    "4,3": {
+      "class": "Weapon",
+      "name": "Small Axe",
+      "damage": 10
+    }
+  }
+}

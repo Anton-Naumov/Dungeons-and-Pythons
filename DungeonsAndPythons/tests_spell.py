@@ -45,6 +45,7 @@ class TestsSpell(unittest.TestCase):
 
     def test_to_json(self):
         expected = {
+            'class': 'Spell',
             'name': 'Fireball',
             'damage': 30,
             'mana_cost': 50,
