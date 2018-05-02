@@ -53,6 +53,8 @@ class Fight:
         attack_tool = self.hero_choose_better_attack()
         damage = self.hero.attack(by=attack_tool)
         if attack_tool == 'spell':
-            print(f'Hero casts {self.spell},hits enemy for {damage}', end='')
-        return damage
+            print(f'Hero casts {self.hero.spell},hits enemy for {damage} dmg', end='')
 
+        if attack_tool == 'weapon':
+            print(f'Hero hits with {self.hero.weapon} for {damage} dmg', end='')
+        return damage
