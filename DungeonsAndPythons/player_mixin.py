@@ -20,8 +20,11 @@ class PlayerMixin:
     def get_mana(self):
         return self._mana
 
-    def can_cast(self):
-        return self._spell is not None and self._mana >= self._spell.mana_cost
+    def can_cast(self, range=0):
+        return self._spell is not None and\
+            self._mana >= self._spell.mana_cost and\
+            self._spell.cast_range > range_
+
 
     def take_healing(self, healing_points):
         if self.is_alive() is False:
@@ -90,18 +93,24 @@ class PlayerMixin:
         return self._spell
 
     # TODO: write test
-    def pick_better_tool_to_fight(self):
-        if not self.can_cast() and self.weapon is None:
-            raise NotEquippedError('Hero cant attack!')
-        elif self.can_cast() and self.weapon is not None:
-            if self.spell.get_damage >= self.weapon.get_damage:
-                return 'spell'
+    def make_better_attack(self, range_):
+        if range_ > 0:
+            if self.can_cast(range_):
+                return self.attack(by='spell')
             else:
-                return 'weapon'
-        elif self.weapon is not None:
-            return 'weapon'
+                raise OutOfRangeError
         else:
-            return 'spell'
+            if not self.can_cast() and self.weapon is None:
+                raise NotEquippedError
+            elif self.can_cast() and self.weapon is not None:
+                if self.spell.get_damage > self.weapon.get_damage:
+                    return self.attack(by='spell')
+                else:
+                    return self.attack(by='weapon')
+            elif not self.can_cast():
+                return self.attack(by='weapon')
+            else:
+                return self.attack(by='spell')
 
     def attack(self, by=None):
         if by == 'weapon':

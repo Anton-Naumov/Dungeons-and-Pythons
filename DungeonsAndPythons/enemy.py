@@ -56,3 +56,9 @@ class Enemy(PlayerMixin):
         enemy.learn(base_class_hero._spell)
 
         return enemy
+
+    def make_better_attack(range_):
+        try:
+            return super(Enemy, self).make_better_attack(range_)
+        except NotEquippedError:
+            return self.attack()
