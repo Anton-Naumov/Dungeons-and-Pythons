@@ -4,3 +4,7 @@ class NotEquippedError(Exception):
 
 class NotEnoughManaError(Exception):
     pass
+
+
+class OutOfRangeError(Exception):
+    pass
