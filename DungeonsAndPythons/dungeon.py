@@ -100,15 +100,21 @@ class Dungeon:
             return False
         elif (type(self._map[new_pos_x][new_pos_y]) is str and
               self._map[new_pos_x][new_pos_y] == '.'):
-            self._map[self._hero_pos[0]][self._hero_pos[1]] = '.'
-            self._map[new_pos_x][new_pos_y] = self._hero
-            self._hero_pos = new_pos_x, new_pos_y
+            self._move_hero_to_pos(new_pos_x, new_pos_y)
         elif isinstance(self._map[new_pos_x][new_pos_y], Enemy):
             Fight(dungeon=self, enemy_pos=(new_pos_x, new_pos_y)).fight()
         else:  # treasure
             self.hero_open_treasure((new_pos_x, new_pos_y))
+            self._move_hero_to_pos(new_pos_x, new_pos_y)
         self._hero.regenerate_mana()
         return True
+
+    def _move_hero_to_pos(self, pos_x, pos_y):
+        if not self.is_pos_on_the_map(pos_x, pos_y):
+            raise Exception('Coordinates not on the map')
+        self._map[self._hero_pos[0]][self._hero_pos[1]] = '.'
+        self._map[pos_x][pos_y] = self._hero
+        self._hero_pos = pos_x, pos_y
 
     def enemy_move(self, enemy_pos, direction):
         new_pos_x = enemy_pos[0] + self.directions[direction][0]

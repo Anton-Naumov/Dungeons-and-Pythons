@@ -331,9 +331,21 @@ class TestsDungeon(unittest.TestCase):
         self.dungeon._map[0][8] = self.hero
         self.dungeon._hero.take_damage(50)
 
-        self.dungeon.move_hero('right')
-
+        self.assertTrue(self.dungeon.move_hero('right'))
         self.assertEqual(self.dungeon._hero.get_health(), 100)
+        self.assertEqual(self.dungeon._map[0][8], '.')
+        self.assertEqual(self.dungeon._hero_pos, (0, 9))
+
+    def test_move_hero_to_pos_raises_exception_on_invalid_pos(self):
+        self.dungeon.spawn(self.hero)
+        with self.assertRaises(Exception):
+            self.dungeon._move_hero_to_pos(-1, 1)
+
+    def test_move_hero_to_pos_moves_hero_to_given_pos(self):
+        self.dungeon.spawn(self.hero)
+        self.dungeon._move_hero_to_pos(1, 1)
+        self.assertEqual(self.dungeon._map[0][0], '.')
+        self.assertEqual(self.dungeon._hero_pos, (1, 1))
 
     def test_enemy_move_throws_exception(self):
         with self.subTest('When there is no enemy on the given position'):
