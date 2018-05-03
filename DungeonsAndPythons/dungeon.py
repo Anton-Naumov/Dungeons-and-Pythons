@@ -74,12 +74,10 @@ class Dungeon:
 
         print('There is no enemy in this direction')
 
-    # TODO tests
     def is_pos_on_the_map(self, pos_x, pos_y):
         return pos_x >= 0 and pos_y >= 0 and pos_x < len(self._map) and\
             pos_y < len(self._map[0])
 
-    # TODO tests
     def inspect_pos(self, pos_x, pos_y):
         if not self.is_pos_on_the_map(pos_x, pos_y):
             raise Exception('Coordinates not on the map')
@@ -91,10 +89,9 @@ class Dungeon:
 
         if isinstance(self._map[new_pos_x][new_pos_y], Enemy) and in_fight:
             self._hero_pos = new_pos_x, new_pos_y
-
-        if self.is_pos_on_the_map(new_pos_x, new_pos_y) is False or\
-           (type(self._map[new_pos_x][new_pos_y]) is str and
-           self._map[new_pos_x][new_pos_y] == '#'):
+        elif self.is_pos_on_the_map(new_pos_x, new_pos_y) is False or\
+            (type(self._map[new_pos_x][new_pos_y]) is str and
+             self._map[new_pos_x][new_pos_y] == '#'):
             return False
         elif (type(self._map[new_pos_x][new_pos_y]) is str and
               self._map[new_pos_x][new_pos_y] == '.'):
@@ -102,7 +99,7 @@ class Dungeon:
             self._map[new_pos_x][new_pos_y] = self._hero
             self._hero_pos = new_pos_x, new_pos_y
         elif isinstance(self._map[new_pos_x][new_pos_y], Enemy):
-            Fight(self, self._map[new_pos_x][new_pos_y], (new_pos_x, new_pos_y)).fight()
+            Fight(dungeon=self, enemy_pos=(new_pos_x, new_pos_y)).fight()
         else:  # treasure
             self.hero_open_treasure((new_pos_x, new_pos_y))
         return True
