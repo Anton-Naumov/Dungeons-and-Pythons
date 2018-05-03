@@ -41,6 +41,26 @@ class Dungeon:
         'up': (-1, 0)
     }
 
+    def attack_from_distance(self, direction):
+        land_hit_pos_x = self._hero_pos[0] + direction[0] * self._hero.spell.cast_range
+        land_hit_pos_y = self._hero_pos[1] + direction[1] * self._hero.spell.cast_range
+
+        start_pos_x = self._hero_pos[0] + direction[0]
+        start_pos_y = self._hero_pos[1] + direction[1]
+        while(start_pos_x <= land_hit_pos_x and
+                start_pos_y <= land_hit_pos_y and
+                start_pos_x <= len(self.map) and
+                start_pos_y <= len(self.map[start_pos_y])):
+            if self._map[start_pos_x][start_pos_y] == '#':
+                raise Exception("Hero cant attack through walls")
+            elif isinstance(self._map[start_pos_x][start_pos_y], Enemy):
+                Fight(self, self._map[start_pos_x][start_pos_y], (start_pos_x, start_pos_y)).fight()
+            else:
+                start_pos_x += direction[0]
+                start_pos_y += direction[1]
+
+        print('There is no enemy in this direction')
+
     def move_hero(self, direction):
         new_pos_x = self._hero_pos[0] + self.directions[direction][0]
         new_pos_y = self._hero_pos[1] + self.directions[direction][1]
