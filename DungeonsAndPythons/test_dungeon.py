@@ -398,14 +398,17 @@ class TestsDungeon(unittest.TestCase):
         self.dungeon._hero.learn(self.spell)
 
         with self.subTest('attack empty space'):
-            self.assertFalse(self.dungeon.attack_from_distance((-1, 0)))
+            self.assertFalse(self.dungeon.attack_from_distance('up'))
 
         with self.subTest('attack a wall'):
             with self.assertRaises(Exception):
-                self.dungeon.attack_from_distance((0, -1))
+                self.dungeon.attack_from_distance('left')
+
+            with self.assertRaises(Exception):
+                self.dungeon.attack_from_distance('down')
 
         with self.subTest('attack an enemy'):
-            self.assertTrue(self.dungeon.attack_from_distance((0, 1)))
+            self.assertTrue(self.dungeon.attack_from_distance('right'))
 
     def test_is_pos_on_the_map_returns_false(self):
         self.assertFalse(self.dungeon.is_pos_on_the_map(-1, -1))

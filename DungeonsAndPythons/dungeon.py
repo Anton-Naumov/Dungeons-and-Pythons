@@ -55,6 +55,7 @@ class Dungeon:
     }
 
     def attack_from_distance(self, direction):
+        direction = self.directions[direction]
         land_hit_pos_x = self._hero_pos[0] + direction[0] * self._hero.spell.cast_range
         land_hit_pos_y = self._hero_pos[1] + direction[1] * self._hero.spell.cast_range
 
