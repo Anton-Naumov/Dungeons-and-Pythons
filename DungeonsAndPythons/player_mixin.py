@@ -1,6 +1,7 @@
 from weapon import Weapon
 from spell import Spell
-from exceptions import NotEnoughManaError, NotEquippedError
+from exceptions import NotEnoughManaError, NotEquippedError, OutOfRangeError
+
 
 class PlayerMixin:
     def __init__(self, *, health, mana):
@@ -20,11 +21,10 @@ class PlayerMixin:
     def get_mana(self):
         return self._mana
 
-    def can_cast(self, range=0):
+    def can_cast(self, range_=0):
         return self._spell is not None and\
             self._mana >= self._spell.mana_cost and\
             self._spell.cast_range > range_
-
 
     def take_healing(self, healing_points):
         if self.is_alive() is False:
