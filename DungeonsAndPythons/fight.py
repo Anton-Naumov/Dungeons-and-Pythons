@@ -77,20 +77,3 @@ class Fight:
                 return True
 
         raise Exception("You should not be here")
-
-    def hero_attack_with_better_weapon(self):
-        try:
-            return self.hero.pick_better_tool_to_fight()
-        except NotEquippedError as exc:
-            print(exc)
-            return None
-
-    def hero_attacks(self):
-        attack_tool = self.hero_attack_with_better_weapon()
-        damage = self.hero.attack(by=attack_tool)
-        if attack_tool == 'spell':
-            print(f'Hero casts {self.hero.spell},hits enemy for {damage} dmg', end='')
-
-        if attack_tool == 'weapon':
-            print(f'Hero hits with {self.hero.weapon} for {damage} dmg', end='')
-        return damage
