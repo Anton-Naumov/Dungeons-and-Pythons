@@ -302,6 +302,14 @@ class TestsDungeon(unittest.TestCase):
         self.assertEqual(self.dungeon._hero, self.hero)
         self.assertEqual(self.dungeon._hero_pos, (0, 0))
 
+    def test_move_hero_with_is_Fight_True_and_enemy_on_the_new_position(self):
+        self.dungeon._map[1][5] = self.hero
+        self.dungeon._hero = self.hero
+        self.dungeon._hero_pos = (1, 5)
+        self.dungeon.move_hero('down', True)
+
+        self.assertEqual(self.dungeon._hero_pos, (2, 5))
+
     def test_move_hero_returns_False(self):
         self.dungeon.spawn(self.hero)
 
@@ -386,6 +394,27 @@ class TestsDungeon(unittest.TestCase):
 
         with self.subTest('attack an enemy'):
             self.assertTrue(self.dungeon.attack_from_distance((0, 1)))
+
+    def test_is_pos_on_the_map_returns_false(self):
+        self.assertFalse(self.dungeon.is_pos_on_the_map(-1, -1))
+        self.assertFalse(self.dungeon.is_pos_on_the_map(10, 1))
+
+    def test_is_pos_on_the_map_returns_true(self):
+        self.assertTrue(self.dungeon.is_pos_on_the_map(0, 0))
+        self.assertTrue(self.dungeon.is_pos_on_the_map(4, 9))
+
+    def test_inspect_pos_raises_Exception_when_given_pos_is_not_valid(self):
+        with self.assertRaises(Exception):
+            self.dungeon.inspect_pos(-1, 1)
+
+    def test_inspect_pos_working_correctly(self):
+        self.dungeon.spawn(self.hero)
+        self.assertEqual(self.dungeon.inspect_pos(0, 0), self.hero)
+        self.assertEqual(self.dungeon.inspect_pos(1, 0), '#')
+        self.assertEqual(self.dungeon.inspect_pos(1, 1), self.tr2)
+        self.assertEqual(self.dungeon.inspect_pos(2, 5), self.enemy1)
+        self.assertEqual(self.dungeon.inspect_pos(0, 1), '.')
+
 
 if __name__ == '__main__':
     unittest.main()
