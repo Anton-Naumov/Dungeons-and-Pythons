@@ -107,11 +107,11 @@ class TestsDungeon(unittest.TestCase):
         self.assertEqual(self.dungeon._hero_pos, None)
 
     def test_get_map(self):
-        expected = 'S.##.....T'\
-                   '#T##..###.'\
-                   '#.###E###E'\
-                   '#.E...###.'\
-                   '###T#T###G'
+        expected = 'S.##.....T\n'\
+                   '#T##..###.\n'\
+                   '#.###E###E\n'\
+                   '#.E...###.\n'\
+                   '###T#T###G\n'
         self.dungeon._map = self.map
 
         self.assertEqual(self.dungeon.get_map(), expected)
