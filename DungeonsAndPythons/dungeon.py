@@ -107,6 +107,7 @@ class Dungeon:
             Fight(dungeon=self, enemy_pos=(new_pos_x, new_pos_y)).fight()
         else:  # treasure
             self.hero_open_treasure((new_pos_x, new_pos_y))
+        self._hero.regenerate_mana()
         return True
 
     def enemy_move(self, enemy_pos, direction):

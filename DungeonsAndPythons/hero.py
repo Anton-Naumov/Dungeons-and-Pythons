@@ -20,6 +20,9 @@ class Hero(PlayerMixin):
     def known_as(self):
         return f'{self._name} the {self._title}'
 
+    def regenerate_mana(self):
+        self._mana += self._mana_regeneration_rate
+
     def attack(self, *, by):
         if by is not None:
             return super(Hero, self).attack(by)
