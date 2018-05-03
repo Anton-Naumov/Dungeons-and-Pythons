@@ -8,3 +8,7 @@ class NotEnoughManaError(Exception):
 
 class OutOfRangeError(Exception):
     pass
+
+
+class YouWin(Exception):
+    pass

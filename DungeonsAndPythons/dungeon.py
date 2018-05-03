@@ -4,6 +4,7 @@ from enemy import Enemy
 from weapon import Weapon
 from spell import Spell
 from fight import Fight
+from exceptions import YouWin
 
 
 class Dungeon:
@@ -102,6 +103,9 @@ class Dungeon:
         elif (type(self._map[new_pos_x][new_pos_y]) is str and
               self._map[new_pos_x][new_pos_y] == '.'):
             self._move_hero_to_pos(new_pos_x, new_pos_y)
+        elif (type(self._map[new_pos_x][new_pos_y]) is str and
+              self._map[new_pos_x][new_pos_y] == 'G'):
+            raise YouWin('Congratulations! You win the game!!!')
         elif isinstance(self._map[new_pos_x][new_pos_y], Enemy):
             self._map[self._hero_pos[0]][self._hero_pos[1]] = '.'
             self._hero_pos = new_pos_x, new_pos_y

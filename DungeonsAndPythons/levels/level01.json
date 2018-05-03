@@ -42,7 +42,7 @@
   "treasures": {
     "1,1": {
       "class": "Potion",
-      "type": "health",
+      "type": "mana",
       "amount": 50
     },
     "4,3": {
@@ -52,7 +52,7 @@
     },
     "0,9": {
       "class": "Potion",
-      "type": "mana",
+      "type": "health",
       "amount": 50
     }
   },
