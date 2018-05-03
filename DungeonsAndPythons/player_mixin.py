@@ -98,10 +98,10 @@ class PlayerMixin:
             if self.can_cast(range_):
                 return self.attack(by='spell')
             else:
-                raise OutOfRangeError
+                raise OutOfRangeError('Cant attack from this range')
         else:
             if not self.can_cast() and self.weapon is None:
-                raise NotEquippedError
+                raise NotEquippedError("Cant attack")
             elif self.can_cast() and self.weapon is not None:
                 if self.spell.get_damage > self.weapon.get_damage:
                     return self.attack(by='spell')
