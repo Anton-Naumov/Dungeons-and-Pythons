@@ -2,6 +2,7 @@ import json
 from enemy import Enemy
 from weapon import Weapon
 from spell import Spell
+from fight import Fight
 
 
 class Dungeon:
@@ -49,12 +50,27 @@ class Dungeon:
             return False
         elif self._map[new_pos_x][new_pos_y] == '.':
             self._map[self._hero_pos[0]][self._hero_pos[1]] = '.'
+            self._map[new_pos_x][new_pos_y] = self._hero
             self._hero_pos = new_pos_x, new_pos_y
-        elif self._map[new_pos_x][new_pos_y] == 'E':
-            pass
+        elif isinstance(self._map[new_pos_x][new_pos_y], Enemy):
+            Fight(self, self._map[new_pos_x][new_pos_y], (new_pos_x, new_pos_y)).fight()
         else:  # treasure
             self.hero_open_treasure((new_pos_x, new_pos_y))
         return True
+
+    def enemy_move(self, enemy_pos, direction):
+        new_pos_x = enemy_pos[0] + self.directions[direction][0]
+        new_pos_y = enemy_pos[1] + self.directions[direction][1]
+
+        assert isinstance(self._map[enemy_pos[0]][enemy_pos[1]], Enemy)
+
+        if self._map[new_pos_x][new_pos_y] == '#' or new_pos_x < 0 or new_pos_y < 0 or\
+           new_pos_x >= len(self._map) or new_pos_y >= len(self._map[0]):
+            raise Exception('Enemy can\'t step there!')
+
+        self._map[new_pos_x][new_pos_y] = self._map[enemy_pos[0]][enemy_pos[1]]
+        self._map[enemy_pos[0]][enemy_pos[1]] = '.'
+        return new_pos_x, new_pos_y
 
     def hero_open_treasure(self, pos_of_treasure):
         treasure = self._map[pos_of_treasure[0]][pos_of_treasure[1]]

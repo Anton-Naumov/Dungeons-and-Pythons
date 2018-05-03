@@ -311,10 +311,11 @@ class TestsDungeon(unittest.TestCase):
         with self.subTest('When trying to move in a wall!'):
             self.assertFalse(self.dungeon.move_hero('down'))
 
-    def test_move_hero_returns_True_when_the_field_he_moves_on_is_free(self):
+    def test_move_hero_returns_True_and_moves_hero_when_the_field_he_moves_on_is_free(self):
         self.dungeon.spawn(self.hero)
 
         self.assertTrue(self.dungeon.move_hero('right'))
+        self.assertEqual(self.dungeon._map[0][0], '.')
 
     def test_move_hero_on_fied_with_treasure_opens_treasure(self):
         self.dungeon._hero = self.hero
@@ -325,6 +326,25 @@ class TestsDungeon(unittest.TestCase):
         self.dungeon.move_hero('right')
 
         self.assertEqual(self.dungeon._hero.get_health(), 100)
+
+    def test_enemy_move_throws_exception(self):
+        with self.subTest('When there is no enemy on the given position'):
+            with self.assertRaises(AssertionError):
+                self.dungeon.enemy_move((1, 1), 'left')
+
+        with self.subTest('When the enemy will move outside the map'):
+            with self.assertRaises(Exception):
+                self.dungeon.enemy_move((2, 9), 'right')
+
+        with self.subTest('When the enemy will move in a wall'):
+            with self.assertRaises(Exception):
+                self.dungeon.enemy_move((2, 9), 'left')
+
+    def test_enemy_move_moves_enemy(self):
+        new_pos_of_enemy = self.dungeon.enemy_move((2, 9), 'up')
+
+        self.assertEqual(new_pos_of_enemy, (1, 9))
+        self.assertEqual(self.dungeon._map[2][9], '.')
 
     def test_hero_open_treasure(self):
         self.dungeon.spawn(self.hero)

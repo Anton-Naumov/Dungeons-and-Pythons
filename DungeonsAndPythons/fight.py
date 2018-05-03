@@ -1,5 +1,9 @@
+from hero import Hero
+from exceptions import NotEquippedError, OutOfRangeError
+
+
 class Fight:
-    def __init__(self, *, dungeon):
+    def __init__(self, *, dungeon, enemy, enemy_pos):
         self.dungeon = dungeon
 
     @property
@@ -57,7 +61,7 @@ class Fight:
 
     def hero_move(self):
         direction = self.direction_to_enemy()
-        for key, value in Dungeon.directions:
+        for key, value in self.dungeon.directions:
             if value == direction:
                 self.dungeon.move_hero(key)
                 return True
@@ -67,9 +71,9 @@ class Fight:
     def enemy_move(self):
         direction = self.direction_to_enemy()
         direction = (- direction[0], - direction[1])
-        for key, value in Dungeon.directions:
+        for key, value in self.dungeon.directions:
             if value == direction:
-                self.dungeon.enemy_move_on_the_map(key)
+                self.enemy_pos = self.dungeon.enemy_move(self.enemy_pos, key)
                 return True
 
         raise Exception("You should not be here")
