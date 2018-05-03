@@ -52,8 +52,8 @@
     },
     "0,9": {
       "class": "Potion",
-      "name": "mana",
-      "damage": 50
+      "type": "mana",
+      "amount": 50
     }
   },
   "hero_weapon": {

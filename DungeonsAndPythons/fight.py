@@ -22,6 +22,7 @@ class Fight:
             if self.enemy.is_alive():
                 self.player_makes_move(self.enemy)
             else:
+                print(f'Hero has: {self.dungeon._hero.get_health()} health left.')
                 print("Enemy is dead!")
                 return True
 

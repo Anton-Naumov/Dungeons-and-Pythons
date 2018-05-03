@@ -1,3 +1,5 @@
+from weapon import Weapon
+from spell import Spell
 from dungeon import Dungeon
 from hero import Hero
 
@@ -24,27 +26,28 @@ class GameMenu:
         self.hero = None
 
     def enter_name(self):
-        name = input('Welcome to the game!Please enter a username')
+        name = input('Welcome to the game!\nPlease enter a username:')
         print('Great job!')
         return name
 
     def setup_game(self, name):
         json_info = Dungeon.get_json_dict('levels/level01.json')
         self.hero = Hero(
-            name,
-            json_info["title"],
-            json_info['health'],
-            json_info['mana'],
-            json_info['mana_regeneration']
+            name=name,
+            title=json_info["hero_title"],
+            health=json_info['hero_health'],
+            mana=json_info['hero_mana'],
+            mana_regeneration_rate=json_info['mana_regeneration']
         )
-        self.hero.equip(json_info['weapon'])
-        self.hero.learn(json_info['spell'])
+        self.hero.equip(Weapon.from_json(json_info['hero_weapon']))
+        self.hero.learn(Spell.from_json(json_info['hero_spell']))
         self.dungeon = Dungeon(json_info)
         self.dungeon.spawn(self.hero)
 
     def gameplay(self):
         while(True):
             print(self.menu)
+            self.dungeon.print_map()
             option = input('Choose an option:')
             try:
                 self.options[option](self)
@@ -56,3 +59,9 @@ class GameMenu:
         direction = input('Enter a direction')
         self.dungeon.attack_from_distance(direction)
 
+
+if __name__ == '__main__':
+    game_menu = GameMenu()
+    name = game_menu.enter_name()
+    game_menu.setup_game(name)
+    game_menu.gameplay()

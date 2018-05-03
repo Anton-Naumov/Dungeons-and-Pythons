@@ -103,7 +103,10 @@ class Dungeon:
               self._map[new_pos_x][new_pos_y] == '.'):
             self._move_hero_to_pos(new_pos_x, new_pos_y)
         elif isinstance(self._map[new_pos_x][new_pos_y], Enemy):
+            self._map[self._hero_pos[0]][self._hero_pos[1]] = '.'
+            self._hero_pos = new_pos_x, new_pos_y
             Fight(dungeon=self, enemy_pos=(new_pos_x, new_pos_y)).fight()
+            self._map[self._hero_pos[0]][self._hero_pos[1]] = 'H'
         else:  # treasure
             self.hero_open_treasure((new_pos_x, new_pos_y))
             self._move_hero_to_pos(new_pos_x, new_pos_y)
@@ -137,12 +140,16 @@ class Dungeon:
         if type(treasure) is dict:
             if treasure['type'] == 'health':
                 self._hero.take_healing(treasure['amount'])
+                print(f'Hero opened treasure with potion for "{treasure["amount"]}" health!')
             elif treasure['type'] == 'mana':
                 self._hero.take_mana(treasure['amount'])
+                print(f'Hero opened treasure with potion for "{treasure["amount"]}" mana!')
         elif type(treasure) is Weapon:
             self._hero.equip(treasure)
+            print(f'Hero opened treasure with weapon "{treasure}""')
         elif type(treasure) is Spell:
             self._hero.learn(treasure)
+            print(f'Hero opened treasure with spell "{treasure}"')
         else:
             raise Exception('No treasure on that pos!')
 
