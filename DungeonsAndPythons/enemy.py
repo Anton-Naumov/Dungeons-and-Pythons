@@ -57,7 +57,7 @@ class Enemy(PlayerMixin):
 
         return enemy
 
-    def make_better_attack(range_):
+    def make_better_attack(self, range_):
         try:
             return super(Enemy, self).make_better_attack(range_)
         except NotEquippedError:

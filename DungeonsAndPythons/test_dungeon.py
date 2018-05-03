@@ -107,11 +107,11 @@ class TestsDungeon(unittest.TestCase):
         self.assertEqual(self.dungeon._hero_pos, None)
 
     def test_get_map(self):
-        expected = 'S.##.....T'\
-                   '#T##..###.'\
-                   '#.###E###E'\
-                   '#.E...###.'\
-                   '###T#T###G'
+        expected = 'S.##.....T\n'\
+                   '#T##..###.\n'\
+                   '#.###E###E\n'\
+                   '#.E...###.\n'\
+                   '###T#T###G\n'
         self.dungeon._map = self.map
 
         self.assertEqual(self.dungeon.get_map(), expected)
@@ -371,6 +371,21 @@ class TestsDungeon(unittest.TestCase):
             self.dungeon.hero_open_treasure((4, 5))
             self.assertEqual(self.dungeon._hero.spell, self.spell)
 
+    def test_attack_from_distance(self):
+        self.dungeon._hero = self.hero
+        self.dungeon._hero_pos = (3, 1)
+        self.dungeon._map[3][1] = self.hero
+        self.dungeon._hero.learn(self.spell)
+
+        with self.subTest('attack empty space'):
+            self.assertFalse(self.dungeon.attack_from_distance((-1, 0)))
+
+        with self.subTest('attack a wall'):
+            with self.assertRaises(Exception):
+                self.dungeon.attack_from_distance((0, -1))
+
+        with self.subTest('attack an enemy'):
+            self.assertTrue(self.dungeon.attack_from_distance((0, 1)))
 
 if __name__ == '__main__':
     unittest.main()
