@@ -67,5 +67,10 @@
     "damage": 5,
     "mana_cost": 10,
     "cast_range": 2
-  }
+  },
+
+  "hero_title": "Noobie",
+  "hero_health": 100,
+  "hero_mana": 100,
+  "mana_regeneration": 5
 }
