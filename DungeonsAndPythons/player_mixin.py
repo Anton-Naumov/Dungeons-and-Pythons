@@ -24,7 +24,7 @@ class PlayerMixin:
     def can_cast(self, range_=0):
         return self._spell is not None and\
             self._mana >= self._spell.mana_cost and\
-            self._spell.cast_range > range_
+            self._spell.cast_range >= range_
 
     def take_healing(self, healing_points):
         if self.is_alive() is False:

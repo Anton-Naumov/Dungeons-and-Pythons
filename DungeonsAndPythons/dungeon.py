@@ -1,4 +1,5 @@
 import json
+from hero import Hero
 from enemy import Enemy
 from weapon import Weapon
 from spell import Spell
@@ -17,12 +18,24 @@ class Dungeon:
         string = []
 
         for line in self._map:
-            string.append(''.join(line))
+            for el in line:
+                if isinstance(el, Spell) or isinstance(el, Weapon) or isinstance(el, dict):
+                    string.append('T')
+                elif isinstance(el, Enemy):
+                    string.append('E')
+                elif isinstance(el, Hero):
+                    string.append('H')
+                else:
+                    string.append(el)
+            string.append('\n')
 
         return "".join(string)
 
     def print_map(self):
         print(self.get_map())
+
+    def get_hero(self):
+        return self._hero
 
     def spawn(self, hero):
         for row in range(len(self._map)):
@@ -41,14 +54,30 @@ class Dungeon:
         'up': (-1, 0)
     }
 
-    def move_hero(self, direction):
+    # TODO tests
+    def is_pos_on_the_map(self, pos_x, pos_y):
+        return pos_x >= 0 and pos_y >= 0 and pos_x < len(self._map) and\
+            pos_y < len(self._map[0])
+
+    # TODO tests
+    def inspect_pos(self, pos_x, pos_y):
+        if not self.is_pos_on_the_map(pos_x, pos_y):
+            raise Exception('Coordinates not on the map')
+        return self._map[pos_x][pos_y]
+
+    def move_hero(self, direction, in_fight=False):
         new_pos_x = self._hero_pos[0] + self.directions[direction][0]
         new_pos_y = self._hero_pos[1] + self.directions[direction][1]
 
-        if self._map[new_pos_x][new_pos_y] == '#' or new_pos_x < 0 or new_pos_y < 0 or\
-           new_pos_x >= len(self._map) or new_pos_y >= len(self._map[0]):
+        if isinstance(self._map[new_pos_x][new_pos_y], Enemy) and in_fight:
+            self._hero_pos = new_pos_x, new_pos_y
+
+        if self.is_pos_on_the_map(new_pos_x, new_pos_y) is False or\
+           (type(self._map[new_pos_x][new_pos_y]) is str and
+           self._map[new_pos_x][new_pos_y] == '#'):
             return False
-        elif self._map[new_pos_x][new_pos_y] == '.':
+        elif (type(self._map[new_pos_x][new_pos_y]) is str and
+              self._map[new_pos_x][new_pos_y] == '.'):
             self._map[self._hero_pos[0]][self._hero_pos[1]] = '.'
             self._map[new_pos_x][new_pos_y] = self._hero
             self._hero_pos = new_pos_x, new_pos_y
@@ -64,8 +93,9 @@ class Dungeon:
 
         assert isinstance(self._map[enemy_pos[0]][enemy_pos[1]], Enemy)
 
-        if self._map[new_pos_x][new_pos_y] == '#' or new_pos_x < 0 or new_pos_y < 0 or\
-           new_pos_x >= len(self._map) or new_pos_y >= len(self._map[0]):
+        if self.is_pos_on_the_map(new_pos_x, new_pos_y) is False or\
+           (type(self._map[new_pos_x][new_pos_y]) is str and
+           self._map[new_pos_x][new_pos_y] == '#'):
             raise Exception('Enemy can\'t step there!')
 
         self._map[new_pos_x][new_pos_y] = self._map[enemy_pos[0]][enemy_pos[1]]
