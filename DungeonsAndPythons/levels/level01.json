@@ -49,6 +49,23 @@
       "class": "Weapon",
       "name": "Small Axe",
       "damage": 10
+    },
+    "0,9": {
+      "class": "Potion",
+      "name": "mana",
+      "damage": 50
     }
+  },
+  "hero_weapon": {
+    "class": "Weapon",
+    "name": "Sword",
+    "damage": 15
+  },
+  "hero_spell": {
+    "class": "Spell",
+    "name": "Frostbolt",
+    "damage": 5,
+    "mana_cost": 10,
+    "cast_range": 2
   }
 }
