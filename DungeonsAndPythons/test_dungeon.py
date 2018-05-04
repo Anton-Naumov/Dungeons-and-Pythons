@@ -402,12 +402,13 @@ class TestsDungeon(unittest.TestCase):
 
         with self.subTest('attack a wall'):
             with self.assertRaises(Exception):
-                self.dungeon.attack_from_distance('left')
+               self.dungeon.attack_from_distance('left')
 
             with self.assertRaises(Exception):
                 self.dungeon.attack_from_distance('down')
 
         with self.subTest('attack an enemy'):
+            self.dungeon._hero.equip(self.weapon)
             self.assertTrue(self.dungeon.attack_from_distance('right'))
 
     def test_is_pos_on_the_map_returns_false(self):

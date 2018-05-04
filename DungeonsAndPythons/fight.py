@@ -1,6 +1,6 @@
 from hero import Hero
 from enemy import Enemy
-from exceptions import NotEquippedError, OutOfRangeError
+from exceptions import NotEquippedError, OutOfRangeError, HeroIsDeadError
 
 
 class Fight:
@@ -16,8 +16,7 @@ class Fight:
             if self.dungeon.get_hero().is_alive():
                 self.player_makes_move(self.dungeon.get_hero())
             else:
-                print("Hero is dead!Game over.")
-                return False
+                raise HeroIsDeadError("Hero is dead!Game over.")
 
             if self.enemy.is_alive():
                 self.player_makes_move(self.enemy)

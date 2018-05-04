@@ -2,7 +2,7 @@ from weapon import Weapon
 from spell import Spell
 from dungeon import Dungeon
 from hero import Hero
-from exceptions import YouWin
+from exceptions import YouWin, HeroIsDeadError
 
 
 class GameMenu:
@@ -57,6 +57,9 @@ class GameMenu:
             try:
                 self.options[option](self)
             except YouWin as e:
+                print(e)
+                return
+            except HeroIsDeadError as e:
                 print(e)
                 return
             except Exception as exc:

@@ -12,3 +12,6 @@ class OutOfRangeError(Exception):
 
 class YouWin(Exception):
     pass
+
+class HeroIsDeadError(Exception):
+	pass

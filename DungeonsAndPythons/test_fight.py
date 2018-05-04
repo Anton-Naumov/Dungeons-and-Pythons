@@ -5,6 +5,7 @@ from dungeon import Dungeon
 from hero import Hero
 from enemy import Enemy
 from fight import Fight
+from exceptions import HeroIsDeadError
 
 
 class FightTests(unittest.TestCase):
@@ -160,6 +161,11 @@ class FightTests(unittest.TestCase):
         self.assertEqual(self.fight.dungeon._hero.get_health(), 85)
         self.assertEqual(self.fight.dungeon._hero_pos, (1, 5))
         self.assertFalse(self.fight.enemy.is_alive())
+
+    def test_fight_hero_is_dead(self):
+        self.hero._health = 10
+        with self.assertRaises(HeroIsDeadError):
+            self.fight.fight()
 
 
 if __name__ == '__main__':
