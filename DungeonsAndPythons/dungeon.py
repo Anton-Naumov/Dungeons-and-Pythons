@@ -60,23 +60,33 @@ class Dungeon:
         land_hit_pos_x = self._hero_pos[0] + direction[0] * self._hero.spell.cast_range
         land_hit_pos_y = self._hero_pos[1] + direction[1] * self._hero.spell.cast_range
 
-        start_pos_x = self._hero_pos[0] + direction[0]
-        start_pos_y = self._hero_pos[1] + direction[1]
-        while(start_pos_x <= land_hit_pos_x and
-                start_pos_y <= land_hit_pos_y and
-                start_pos_x >= 0 and
-                start_pos_y >= 0 and
-                start_pos_x < len(self._map) and
-                start_pos_y < len(self._map[start_pos_y])):
-            if type(self._map[start_pos_x][start_pos_y]) is str and\
+        start_pos_x = self._hero_pos[0]
+        start_pos_y = self._hero_pos[1]
+
+        range_ = max(abs(land_hit_pos_x - start_pos_x), abs(land_hit_pos_y - start_pos_y))
+        for i in range(range_):
+            start_pos_x, start_pos_y = (start_pos_x + direction[0], start_pos_y + direction[1])
+            if start_pos_x < 0 or\
+                start_pos_y < 0 or\
+                start_pos_x >= len(self._map) or\
+                start_pos_y >= len(self._map[start_pos_x]):
+                break
+        # while(abs(start_pos_x) <= abs(land_hit_pos_x) and
+        #         abs(start_pos_y) <= abs(land_hit_pos_y) and
+        #         start_pos_x >= 0 and
+        #         start_pos_y >= 0 and
+        #         start_pos_x < len(self._map) and
+        #         start_pos_y < len(self._map[start_pos_x])):
+            elif type(self._map[start_pos_x][start_pos_y]) is str and\
                     self._map[start_pos_x][start_pos_y] == '#':
                 raise Exception("Hero cant attack through walls")
             elif isinstance(self._map[start_pos_x][start_pos_y], Enemy):
-                Fight(dungeon=self, enemy_pos=(start_pos_x, start_pos_y)).fight()
+                if self._hero.can_cast():
+                    Fight(dungeon=self, enemy_pos=(start_pos_x, start_pos_y)).fight()
+                    self._map[self._hero_pos[0]][self._hero_pos[1]] = 'H'
+                else:
+                    raise Exception('Hero doesnt have enough mana to attack from distance')
                 return True
-            else:
-                start_pos_x += direction[0]
-                start_pos_y += direction[1]
 
         print('There is no enemy in this direction')
         return False
