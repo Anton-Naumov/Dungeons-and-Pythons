@@ -59,12 +59,11 @@ class GameMenu:
             except YouWin as e:
                 print(e)
                 return
-            except Exception:
-                print('Game Over!')
-                return
+            except Exception as exc:
+                print(exc)
 
     def option_attack_from_distance(self):
-        direction = input('Enter a direction')
+        direction = input('Enter a direction:')
         self.dungeon.attack_from_distance(direction)
 
 
