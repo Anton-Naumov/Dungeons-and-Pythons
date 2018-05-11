@@ -18,11 +18,12 @@ class GameMenu:
         level02
     """
     menu = """
-                1)Move left
-                2)Move right
-                3)Move up
-                4)Move down
-                5)Attack from distance in some way
+    1)Move left
+    2)Move right
+    3)Move up
+    4)Move down
+    5)Attack from distance in some way
+    6)Quit game
     """
 
     def __init__(self):
@@ -64,8 +65,12 @@ class GameMenu:
     def play(self):
         while(True):
             print(self.menu)
+            print(f'{self.dungeon._hero}\n')
             self.dungeon.print_map()
             option = input('Choose an option:')
+            print()
+            if option == '6':
+                return
             while option not in self.options.keys():
                 print('Invalid option! Try again.')
                 option = input('Choose an option:')
