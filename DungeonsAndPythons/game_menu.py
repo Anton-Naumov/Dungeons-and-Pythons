@@ -13,7 +13,10 @@ class GameMenu:
         '4': lambda inst: inst.dungeon.move_hero('down'),
         '5': lambda inst: inst.option_attack_from_distance()
     }
-
+    levels = """
+        level01
+        level02
+    """
     menu = """
                 1)Move left
                 2)Move right
@@ -32,18 +35,30 @@ class GameMenu:
         print('Great job!')
         self.name = name
 
+    def choose_level(self):
+        import re
+        pattern = re.compile("level0[1-2]")
+        print(self.levels)
+        level_name = input("Choose a level of the game\n:")
+        while(not pattern.match(level_name)):
+            print(self.levels)
+            level_name = input("Please enter correct level\n:")
+
+        return Dungeon.get_json_dict(f'levels/{level_name}.json')
+
     def setup_game(self):
-        json_info = Dungeon.get_json_dict('levels/level01.json')
+        level = self.choose_level()
+
         self.hero = Hero(
             name=self.name,
-            title=json_info["hero_title"],
-            health=json_info['hero_health'],
-            mana=json_info['hero_mana'],
-            mana_regeneration_rate=json_info['mana_regeneration']
+            title=level["hero_title"],
+            health=level['hero_health'],
+            mana=level['hero_mana'],
+            mana_regeneration_rate=level['mana_regeneration']
         )
-        self.hero.equip(Weapon.from_json(json_info['hero_weapon']))
-        self.hero.learn(Spell.from_json(json_info['hero_spell']))
-        self.dungeon = Dungeon(json_info)
+        self.hero.equip(Weapon.from_json(level['hero_weapon']))
+        self.hero.learn(Spell.from_json(level['hero_spell']))
+        self.dungeon = Dungeon(level)
         self.dungeon.spawn(self.hero)
 
     def play(self):

@@ -1,0 +1,107 @@
+{
+  "map": [
+    "G..#S#E....",
+    ".#E#...###.",
+    ".#.###E#TE.",
+    ".#..T..##..",
+    ".#########.",
+    "E.........T"
+  ],
+  "enemies": {
+    "0,6": {
+      "damage": 10,
+      "health": 80,
+      "mana": 25,
+      "weapon": null,
+      "spell": {
+        "class": "Spell",
+        "name": "Frostbolt",
+        "damage": 5,
+        "mana_cost": 20,
+        "cast_range": 1
+      }
+    },
+    "5,0": {
+      "damage": 20,
+      "health": 100,
+      "mana": 20,
+      "weapon": {
+        "class": "Weapon",
+        "name": "Sword of Justice",
+        "damage": 10
+      },
+      "spell": null
+    },
+    "2,6": {
+      "damage": 5,
+      "health": 60,
+      "mana": 20,
+      "weapon": {
+        "class": "Weapon",
+        "name": "Doomhammer",
+        "damage": 30
+      },
+      "spell": null
+    },
+    "1,2": {
+      "damage": 0,
+      "health": 100,
+      "mana": 100,
+      "weapon": null,
+      "spell": {
+        "class": "Spell",
+        "name": "Death Coil",
+        "damage": 55,
+        "mana_cost": 30,
+        "cast_range": 3
+      }
+    },
+    "2,9": {
+      "damage": 20,
+      "health": 70,
+      "mana": 50,
+      "weapon": null,
+      "spell": {
+        "class": "Spell",
+        "name": "Arcane Blast",
+        "damage": 10,
+        "mana_cost": 25,
+        "cast_range": 2
+      }
+    }
+  },
+  "treasures": {
+    "2,8": {
+      "class": "Potion",
+      "type": "mana",
+      "amount": 50
+    },
+    "3,4": {
+      "class": "Weapon",
+      "name": "Arcanite Reaper",
+      "damage": 50
+    },
+    "5,10": {
+      "class": "Potion",
+      "type": "health",
+      "amount": 50
+    }
+  },
+  "hero_weapon": {
+    "class": "Weapon",
+    "name": "Truesilver Champion",
+    "damage": 30
+  },
+  "hero_spell": {
+    "class": "Spell",
+    "name": "Frostbolt",
+    "damage": 15,
+    "mana_cost": 30,
+    "cast_range": 2
+  },
+
+  "hero_title": "Squire",
+  "hero_health": 150,
+  "hero_mana": 150,
+  "mana_regeneration": 5
+}
