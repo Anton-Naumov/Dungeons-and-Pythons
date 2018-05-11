@@ -1,5 +1,0 @@
-test_files=`ls|find test*.py`
-for x in `echo $test_files`
-    do
-        python3.6 $x
-    done
